@@ -117,6 +117,7 @@ namespace ppkin {
 		vkDestroySurfaceKHR(instance, surface, nullptr);
 		for (auto view : swapChainImageViews) {
 			vkDestroyImageView(devices.getLogicalDevice(), view, nullptr);
+
 		}
 		vkDestroyDescriptorPool(devices.getLogicalDevice(), descriptorPool, nullptr);
 		for (auto cameraData : frameCameraData) {
@@ -124,6 +125,10 @@ namespace ppkin {
 			vkFreeMemory(devices.getLogicalDevice(), cameraData.cameraDataBuffer.bufferMemory, nullptr);
 			vkDestroyBuffer(devices.getLogicalDevice(), cameraData.cameraDataBuffer.buffer, nullptr);
 		}
+		for (auto depthData : depthBufferData) {
+			depthData.DestroyDepthResources();
+		}
+
 		delete meshes;
 		delete theScene;
 		for (auto& o : gameObjects) {
@@ -178,6 +183,14 @@ namespace ppkin {
 			if (vkCreateImageView(devices.getLogicalDevice(), &createInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
 				throw std::runtime_error("failed to create image views!");
 			}
+			FrameData depthData;
+			depthData.setDevice(&devices);
+			depthData.width = Schain.getSwapChainExtent().width;
+			depthData.height = Schain.getSwapChainExtent().height;
+			depthData.CreateDepthResources();
+
+			depthBufferData.push_back(depthData);
+			std::cout << "created depth buffer for image: " << i << std::endl;
 		}
 	}
 	/*
@@ -214,6 +227,9 @@ namespace ppkin {
 		subpass.colorAttachmentCount = 1;
 		subpass.pColorAttachments = &colorAttachmentRef;
 
+		VkAttachmentReference depthRef= pipeline.makeDepthAttachmentReference();
+		subpass.pDepthStencilAttachment = &depthRef;
+
 		VkSubpassDependency dependency{};
 		dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
 		dependency.dstSubpass = 0;
@@ -224,10 +240,12 @@ namespace ppkin {
 		dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 		dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
+		VkAttachmentDescription depthAttachment = pipeline.makeDepthAttachment(depthBufferData[0].depthFormat);
+		std::vector<VkAttachmentDescription> attachments = { colorAttachment, depthAttachment };
 		VkRenderPassCreateInfo renderPassInfo{};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-		renderPassInfo.attachmentCount = 1;
-		renderPassInfo.pAttachments = &colorAttachment;
+		renderPassInfo.attachmentCount = attachments.size();
+		renderPassInfo.pAttachments = attachments.data();
 		renderPassInfo.subpassCount = 1;
 		renderPassInfo.pSubpasses = &subpass;
 
@@ -242,20 +260,22 @@ namespace ppkin {
 	{
 		swapChainFramebuffers.resize(swapChainImageViews.size());
 		for (size_t i = 0; i < swapChainImageViews.size(); i++) {
-			VkImageView attachments[] = {
-				swapChainImageViews[i]
+			std::vector<VkImageView> attachments = {
+				swapChainImageViews[i],depthBufferData[i].depthBufferView
 			};
 			VkFramebufferCreateInfo framebufferInfo{};
 			framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 			framebufferInfo.renderPass = renderPass;
-			framebufferInfo.attachmentCount = 1;
-			framebufferInfo.pAttachments = attachments;
+			framebufferInfo.attachmentCount = attachments.size();
+			framebufferInfo.pAttachments = attachments.data();
 			framebufferInfo.width = Schain.getSwapChainExtent().width;
 			framebufferInfo.height = Schain.getSwapChainExtent().height;
 			framebufferInfo.layers = 1;
 			if (vkCreateFramebuffer(devices.getLogicalDevice(), &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
 				throw std::runtime_error("failed to create frame buffer!");
 			}
+
+			
 		}
 		
 	}
@@ -316,8 +336,15 @@ namespace ppkin {
 		renderPassInfo.renderArea.offset = { 0,0 };
 		renderPassInfo.renderArea.extent = Schain.getSwapChainExtent();
 		VkClearValue clearColor = { {{0.0f,0.0f,0.0f,1.0f}} };
-		renderPassInfo.clearValueCount = 1;
-		renderPassInfo.pClearValues = &clearColor;
+		VkClearValue clearDepth;
+		clearDepth.depthStencil = VkClearDepthStencilValue{1.0f,0 };
+		std::vector<VkClearValue> values = { {clearColor,clearDepth} };
+		//not sure
+
+
+
+		renderPassInfo.clearValueCount = 2;
+		renderPassInfo.pClearValues = values.data();
 
 		vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -354,7 +381,7 @@ namespace ppkin {
 			ObjectData objData;
 			//objData.model = o.transform.mat4();
 			//std::cout << glm::to_string(o.transform.mat4());
-			std::cout << i << std::endl;
+			//std::cout << i << std::endl;
 			o.transform.roatation.y = glm::mod(o.transform.roatation.y + 5.f,glm::two_pi<float>());
 			o.transform.roatation.x = glm::mod(o.transform.roatation.x + 5.f, glm::two_pi<float>());
 			//std::cout << o.transform.roatation.y << std::endl;
@@ -574,14 +601,6 @@ namespace ppkin {
 		o.transform.scale = { .9f,.9f,.9f };
 		gameObjects.push_back(std::move(o));
 	
-	}
-
-	void firstApp::prepare_scene(VkCommandBuffer commandBuffer)
-	{
-		//VkBuffer vertexBuffers[] = { meshes->vertexBuffer.buffer };
-		//VkBuffer vertexBuffers[] = { gameObjects[0].getObjectModel().buffer.buffer };
-		VkDeviceSize offset[] = { 0 };
-		//vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offset);
 	}
 
 	// create projection matrix

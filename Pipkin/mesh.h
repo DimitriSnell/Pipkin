@@ -10,7 +10,6 @@ namespace ppkin {
 		bindingdescription.binding = 0;
 		bindingdescription.stride = sizeof(model::Vertex);
 		bindingdescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
 		return bindingdescription;
 	}
 

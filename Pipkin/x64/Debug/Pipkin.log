@@ -1,2 +1,8 @@
-﻿  graphics_pipeline.cpp
+﻿  first_app.cpp
+C:\Users\meach\source\repos\Pipkin\Pipkin\first_app.cpp(92,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\meach\source\repos\Pipkin\Pipkin\first_app.cpp(247,52): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\meach\source\repos\Pipkin\Pipkin\first_app.cpp(269,54): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+x64\Debug\memory.obj : warning LNK4042: object specified more than once; extras ignored
+x64\Debug\vertex_lump.obj : warning LNK4042: object specified more than once; extras ignored
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Pipkin.vcxproj -> C:\Users\meach\source\repos\Pipkin\x64\Debug\Pipkin.exe

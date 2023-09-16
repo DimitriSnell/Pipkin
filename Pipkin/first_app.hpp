@@ -12,6 +12,7 @@
 #include"UBO.h"
 #include"Descriptors.h"
 #include"object.h"
+#include"Frame_Data.h"
 namespace ppkin {
 	class firstApp {
 	public:
@@ -59,11 +60,11 @@ namespace ppkin {
 		VkRenderPass renderPass;
 		//VkPipelineLayout pipelineLayout;//
 		
-		// one for each frame in each vector
+		// one in each vector for each frame in the swap chain
 		std::vector<VkFramebuffer> swapChainFramebuffers;
 		std::vector<cameraData> frameCameraData;
 		std::vector<VkCommandBuffer> frameCommandbuffers;
-	
+		std::vector<FrameData> depthBufferData;
 
 		VkDescriptorPool descriptorPool;
 		VkCommandPool commandPool;
