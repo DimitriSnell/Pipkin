@@ -8,15 +8,15 @@
 #include <glm/mat4x4.hpp>
 
 #include <iostream>
-#include "first_app.hpp"
+#include "app.h"
 #include <stdexcept>
 #include<vulkan/vulkan.hpp>
 int main() {
     
-    ppkin::firstApp app;
+    ppkin::app firstApp;
     
     try {
-        app.run();
+        firstApp.run();
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << '\n';

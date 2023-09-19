@@ -135,9 +135,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="app.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Descriptors.cpp" />
-    <ClCompile Include="first_app.cpp" />
+    <ClCompile Include="renderer.cpp" />
     <ClCompile Include="Frame_Data.cpp" />
     <ClCompile Include="graphics_pipeline.cpp" />
     <ClCompile Include="Keyboard_movement.cpp" />
@@ -156,10 +157,11 @@
     <ClCompile Include="vertex_lump.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="app.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="Descriptors.h" />
-    <ClInclude Include="first_app.hpp" />
+    <ClInclude Include="renderer.hpp" />
     <ClInclude Include="Frame_Data.h" />
     <ClInclude Include="graphics_pipeline.hpp" />
     <ClInclude Include="image.h" />
