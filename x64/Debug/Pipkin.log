@@ -1,6 +1,8 @@
 ﻿  app.cpp
-x64\Debug\Keyboard_movement.obj : warning LNK4042: object specified more than once; extras ignored
-x64\Debug\memory.obj : warning LNK4042: object specified more than once; extras ignored
-x64\Debug\vertex_lump.obj : warning LNK4042: object specified more than once; extras ignored
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  main.cpp
+  renderer.cpp
+C:\Users\meach\source\repos\Pipkin\Pipkin\renderer.cpp(82,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\meach\source\repos\Pipkin\Pipkin\renderer.cpp(233,52): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\meach\source\repos\Pipkin\Pipkin\renderer.cpp(255,54): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+  Generating Code...
   Pipkin.vcxproj -> C:\Users\meach\source\repos\Pipkin\x64\Debug\Pipkin.exe

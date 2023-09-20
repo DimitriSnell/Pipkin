@@ -13,8 +13,8 @@ namespace ppkin {
 		return bindingdescription;
 	}
 
-	std::array<VkVertexInputAttributeDescription, 2> getPosColorAttributeDescriptions() {
-		std::array<VkVertexInputAttributeDescription, 2> attributes;
+	std::array<VkVertexInputAttributeDescription, 4> getPosColorAttributeDescriptions() {
+		std::array<VkVertexInputAttributeDescription, 4> attributes;
 
 		//position
 		attributes[0].binding = 0;
@@ -28,6 +28,17 @@ namespace ppkin {
 		attributes[1].format = VK_FORMAT_R32G32B32_SFLOAT;
 		attributes[1].offset = offsetof(model::Vertex, color);
 
+		//color
+		attributes[2].binding = 0;
+		attributes[2].location = 2;
+		attributes[2].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributes[2].offset = offsetof(model::Vertex, normal);
+
+		//color
+		attributes[3].binding = 0;
+		attributes[3].location = 3;
+		attributes[3].format = VK_FORMAT_R32G32_SFLOAT;
+		attributes[3].offset = offsetof(model::Vertex, uv);
 		return attributes;
 	}
 };

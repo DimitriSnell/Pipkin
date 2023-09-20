@@ -1,5 +1,6 @@
+#pragma once
 #include "app.h"
-
+#include"Keyboard_movement.h"
 namespace ppkin {
 	void app::run()
 	{
@@ -15,7 +16,6 @@ namespace ppkin {
 		auto viewerObject = Object::createObject();
 		while (!ppwin.shouldClose()) {
 			glfwPollEvents();
-
 
 			auto newTime = std::chrono::high_resolution_clock::now();
 
@@ -47,7 +47,8 @@ namespace ppkin {
 
 	void app::make_assets()
 	{
-		std::vector<model::Vertex> verticies{
+		model::Builder builder{};
+		builder.vertices = {
 
 			// left face (white)
 			{{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
@@ -99,9 +100,11 @@ namespace ppkin {
 
 		};
 		//auto m = new model(&devices, verticies);
-		auto m = std::make_shared<model>(devices, verticies);
+		//auto m = std::make_shared<model>(devices, builder);
+		std::shared_ptr<model> m = model::createModelFromFile(*devices, "C:/Users/meach/source/repos/Pipkin/Pipkin/models/nier-automata-3d-print-figure/source/SkecthFab2/SkecthFab2.obj");
 		Object o = Object::createObject();
 		o.ObjectModel = m;
+
 		//o.transform.translation = { .0f,.0f,.0f };
 		o.transform.translation = { 0.0f,0.0f, 0.f };
 		o.transform.scale = { .5f,.5f,.5f };

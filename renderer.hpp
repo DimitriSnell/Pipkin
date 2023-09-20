@@ -17,7 +17,6 @@
 namespace ppkin {
 	class Renderer {
 	public:
-		//void run();
 		Renderer();
 		void initVulkan();
 		void cleanup();

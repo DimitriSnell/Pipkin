@@ -105,17 +105,17 @@ namespace ppkin {
 		vkDestroySwapchainKHR(devices.getLogicalDevice(), Schain.getSwapChain(), nullptr);
 		
 		vkDestroySurfaceKHR(instance, surface, nullptr);
-		for (auto view : swapChainImageViews) {
+		for (auto& view : swapChainImageViews) {
 			vkDestroyImageView(devices.getLogicalDevice(), view, nullptr);
 
 		}
 		vkDestroyDescriptorPool(devices.getLogicalDevice(), descriptorPool, nullptr);
-		for (auto cameraData : frameCameraData) {
+		for (auto& cameraData : frameCameraData) {
 			vkUnmapMemory(devices.getLogicalDevice(), cameraData.cameraDataBuffer.bufferMemory);
 			vkFreeMemory(devices.getLogicalDevice(), cameraData.cameraDataBuffer.bufferMemory, nullptr);
 			vkDestroyBuffer(devices.getLogicalDevice(), cameraData.cameraDataBuffer.buffer, nullptr);
 		}
-		for (auto depthData : depthBufferData) {
+		for (auto& depthData : depthBufferData) {
 			depthData.DestroyDepthResources();
 		}
 
@@ -321,7 +321,7 @@ namespace ppkin {
 		renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex];
 		renderPassInfo.renderArea.offset = { 0,0 };
 		renderPassInfo.renderArea.extent = Schain.getSwapChainExtent();
-		VkClearValue clearColor = { {{0.0f,0.0f,0.0f,1.0f}} };
+		VkClearValue clearColor = { {{0.0067f,0.0081f,0.0081f,1.0f}} };
 		VkClearValue clearDepth;
 		clearDepth.depthStencil = VkClearDepthStencilValue{1.0f,0 };
 		std::vector<VkClearValue> values = { {clearColor,clearDepth} };
@@ -356,16 +356,16 @@ namespace ppkin {
 		vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
 
-
+		static float i = 0.f;
 		for (Object o : gameObjects) {
-			
+			i += .01f;
 			//glm::mat4 transform = glm::translate(glm::mat4(1.0f));
 			ObjectData objData;
 			//objData.model = o.transform.mat4();
 			//std::cout << glm::to_string(o.transform.mat4());
 			//std::cout << i << std::endl;
 			//o.transform.roatation.y = glm::mod(o.transform.roatation.y + 2.5f,glm::two_pi<float>());
-			//o.transform.roatation.x = glm::mod(o.transform.roatation.x + 7.6f, glm::two_pi<float>());
+			o.transform.roatation.y = glm::mod(o.transform.roatation.x + i, glm::two_pi<float>());
 			//std::cout << o.transform.roatation.y << std::endl;
 			objData.model = o.transform.mat4();
 			objData.color = glm::vec3(1, 1, 1);

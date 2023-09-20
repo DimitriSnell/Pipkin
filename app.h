@@ -1,6 +1,9 @@
 #pragma once
 #include"renderer.hpp"
 #include"Camera.h"
+#pragma once
+#include"renderer.hpp"
+#include"Camera.h"
 #include"pp_window.hpp"
 #include"logical_device.hpp"
 #include"object.h"
