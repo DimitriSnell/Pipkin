@@ -22,13 +22,14 @@ namespace ppkin {
 	{
 		VkPhysicalDeviceMemoryProperties memoryProperties;
 		vkGetPhysicalDeviceMemoryProperties(Pdevice, &memoryProperties);
-
+		std::cout << "looking for index" << std::endl;
 		for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++) {
 			bool supported{ static_cast<bool>(supportedMemoryIndices & (1 << i)) };
 
 			bool sufficient{ (memoryProperties.memoryTypes[i].propertyFlags & requestedProperties) == requestedProperties };
 
 			if (supported && sufficient) {
+				std::cout << "found index & " << i << std::endl;
 				return i;
 			}
 		};
@@ -52,4 +53,8 @@ namespace ppkin {
 			throw std::exception("Failed to bind buffer!");
 		}
 	}
+
+
+
+	
 }

@@ -109,7 +109,7 @@ void ppkin::graphicsPipeline::createGraphicsPipeline(logicDevice* device, swapCh
 
 	vertexInputInfo.vertexBindingDescriptionCount = 1;
 	vertexInputInfo.pVertexBindingDescriptions = &bindingDescription; // Optional
-	vertexInputInfo.vertexAttributeDescriptionCount = 4;
+	vertexInputInfo.vertexAttributeDescriptionCount = 5;
 	vertexInputInfo.pVertexAttributeDescriptions = attributes.data(); // Optional
 
 

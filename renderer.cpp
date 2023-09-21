@@ -13,7 +13,7 @@
 #include"glm/gtc/constants.hpp"
 #include<chrono>
 #include"Keyboard_movement.h"
-
+#include"image.h"
 namespace ppkin {
 	Renderer::Renderer()
 	{
@@ -36,6 +36,7 @@ namespace ppkin {
 		createCommandPool();
 		createCommandbuffer();
 		createSyncObjects();
+		createSampler();
 		createFrameResources();
 	}
 	void Renderer::createInstance()
@@ -278,6 +279,7 @@ namespace ppkin {
 		if (vkCreateCommandPool(devices.getLogicalDevice(), &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create command pool!");
 		}
+		devices.commandPool = &commandPool;
 	}
 
 	void Renderer::createCommandbuffer()
@@ -358,7 +360,7 @@ namespace ppkin {
 
 		static float i = 0.f;
 		for (Object o : gameObjects) {
-			i += .01f;
+			i += .001f;
 			//glm::mat4 transform = glm::translate(glm::mat4(1.0f));
 			ObjectData objData;
 			//objData.model = o.transform.mat4();
@@ -440,10 +442,10 @@ namespace ppkin {
 	void Renderer::createFrameResources()
 	{
 		descriptorSetLayoutData bindings;
-		bindings.count = 1;
+		bindings.count = 3;
 		bindings.types.push_back(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER);
-		
-		
+		bindings.types.push_back(VK_DESCRIPTOR_TYPE_SAMPLER);
+		bindings.types.push_back(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE);
 		for (auto & frame : swapChainFramebuffers) {
 			cameraData d;
 			frameCameraData.push_back(d);
@@ -476,6 +478,11 @@ namespace ppkin {
 
 	}
 
+	void Renderer::createSampler()
+	{
+		sampler = createTextureSampler(devices.getPhysicalDevice(), devices.getLogicalDevice());
+	}
+
 	// create projection matrix
 	void Renderer::prepareFrame(uint32_t imageIndex)
 	{
@@ -502,7 +509,22 @@ namespace ppkin {
 		//frameCameraData[imageIndex].CData.viewProjection = glm::mat4(1.0);
 		memcpy(frameCameraData[imageIndex].cameraDataWriteLocation, &frameCameraData[imageIndex].CData, sizeof(UBO));
 
-		frameCameraData[imageIndex].writeDescriptorSet(devices.getLogicalDevice());
+
+		for (int i = 0; i < 8; i++) {
+			descriptorImageInfos[i].sampler = nullptr;
+			descriptorImageInfos[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			if (i < textures.size()) {
+				descriptorImageInfos[i].imageView = textures[i];
+
+			}
+			else {
+				descriptorImageInfos[i].imageView = textures[textures.size() - 1];
+			}
+		}
+
+
+
+		frameCameraData[imageIndex].writeDescriptorSet(devices.getLogicalDevice(), descriptorImageInfos, sampler);
 	}
 	
 	void Renderer::createSurface()

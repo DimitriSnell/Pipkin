@@ -101,15 +101,15 @@ namespace ppkin {
 		};
 		//auto m = new model(&devices, verticies);
 		//auto m = std::make_shared<model>(devices, builder);
-		std::shared_ptr<model> m = model::createModelFromFile(*devices, "C:/Users/meach/source/repos/Pipkin/Pipkin/models/nier-automata-3d-print-figure/source/SkecthFab2/SkecthFab2.obj");
+		std::shared_ptr<model> m = model::createModelFromFile(*devices, "C:/Users/meach/Desktop/2bModel/2bModel.obj");
 		Object o = Object::createObject();
 		o.ObjectModel = m;
-
+		//m.get()->createTextureImage();
 		//o.transform.translation = { .0f,.0f,.0f };
 		o.transform.translation = { 0.0f,0.0f, 0.f };
 		o.transform.scale = { .5f,.5f,.5f };
 		gameObjects.push_back(std::move(o));
-
+		renderer->textures = m.get()->textureViews;
 	}
 	
 }

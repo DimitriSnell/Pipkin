@@ -1,6 +1,7 @@
 C:\Users\meach\source\repos\Pipkin\Pipkin\app.cpp;C:\Users\meach\source\repos\Pipkin\Pipkin\x64\Release\app.obj
 C:\Users\meach\source\repos\Pipkin\Pipkin\Camera.cpp;C:\Users\meach\source\repos\Pipkin\Pipkin\x64\Release\Camera.obj
 C:\Users\meach\source\repos\Pipkin\Pipkin\Descriptors.cpp;C:\Users\meach\source\repos\Pipkin\Pipkin\x64\Release\Descriptors.obj
+C:\Users\meach\source\repos\Pipkin\Pipkin\image.cpp;C:\Users\meach\source\repos\Pipkin\Pipkin\x64\Release\image.obj
 C:\Users\meach\source\repos\Pipkin\Pipkin\renderer.cpp;C:\Users\meach\source\repos\Pipkin\Pipkin\x64\Release\renderer.obj
 C:\Users\meach\source\repos\Pipkin\Pipkin\Frame_Data.cpp;C:\Users\meach\source\repos\Pipkin\Pipkin\x64\Release\Frame_Data.obj
 C:\Users\meach\source\repos\Pipkin\Pipkin\graphics_pipeline.cpp;C:\Users\meach\source\repos\Pipkin\Pipkin\x64\Release\graphics_pipeline.obj

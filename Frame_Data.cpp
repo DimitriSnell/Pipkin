@@ -1,3 +1,4 @@
+#pragma once
 #include "Frame_Data.h"
 #include<iostream>
 #include"image.h"

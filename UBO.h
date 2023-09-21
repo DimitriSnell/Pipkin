@@ -1,6 +1,7 @@
 #pragma once
 #include"config.h"
 #include"memory.h"
+#include<array>
 namespace ppkin {
 	struct UBO {
 		glm::mat4 view;
@@ -34,17 +35,47 @@ namespace ppkin {
 			UBODescriptor.range = sizeof(UBO);
 
 		}
-		void writeDescriptorSet(VkDevice device) {
-			VkWriteDescriptorSet writeInfo{};
-			writeInfo.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			writeInfo.dstSet = descriptorSet;
-			writeInfo.dstBinding = 0;
-			writeInfo.dstArrayElement = 0;
-			writeInfo.descriptorCount = 1;
-			writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-			writeInfo.pBufferInfo = &UBODescriptor;
+		void writeDescriptorSet(VkDevice device, VkDescriptorImageInfo infos[], VkSampler& sampler) {
 
-			vkUpdateDescriptorSets(device,1,&writeInfo,0, nullptr);
+			std::array<VkWriteDescriptorSet, 3> writeInfo;
+			writeInfo[0] = {};
+			writeInfo[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			writeInfo[0].dstSet = descriptorSet;
+			writeInfo[0].dstBinding = 0;
+			writeInfo[0].dstArrayElement = 0;
+			writeInfo[0].descriptorCount = 1;
+			writeInfo[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+			writeInfo[0].pBufferInfo = &UBODescriptor;
+			writeInfo[0].pNext = nullptr;
+
+			VkDescriptorImageInfo samplerInfo = {};
+			samplerInfo.sampler = sampler;
+
+			writeInfo[1] = {};
+			writeInfo[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			writeInfo[1].dstBinding = 1;
+			writeInfo[1].dstArrayElement = 0;
+			writeInfo[1].descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
+			writeInfo[1].descriptorCount = 1;
+			writeInfo[1].dstSet = descriptorSet;
+			writeInfo[1].pBufferInfo = 0;
+			writeInfo[1].pImageInfo = &samplerInfo;
+			writeInfo[1].pNext = nullptr;
+
+
+			writeInfo[2].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			writeInfo[2].dstSet = descriptorSet;
+			writeInfo[2].dstBinding = 2;
+			writeInfo[2].dstArrayElement = 0;
+			writeInfo[2].descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+			writeInfo[2].descriptorCount = 8;
+			writeInfo[2].pBufferInfo = 0;
+			writeInfo[2].pImageInfo = infos;
+			writeInfo[2].pNext = nullptr;
+
+		
+
+			vkUpdateDescriptorSets(device,3,writeInfo.data(), 0, nullptr);
 
 		}
 		VkDescriptorSet descriptorSet;

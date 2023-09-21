@@ -24,6 +24,7 @@ namespace ppkin {
 		void setCamera(Camera* camera);
 		logicDevice devices;
 		ppWindow* ppwin;
+		std::vector<VkImageView> textures;
 	private:
 		
 		void createInstance();
@@ -39,6 +40,7 @@ namespace ppkin {
 		void createFrameResources();
 		void createSyncObjects();
 		void make_assets();
+		void createSampler();
 		//void prepare_scene(VkCommandBuffer commandBuffer);
 		void prepareFrame(uint32_t imageIndex);
 		//QueueFamilyIndicies findQueueFamilies(VkPhysicalDevice device);
@@ -81,6 +83,9 @@ namespace ppkin {
 		//VertexLump* meshes;
 		//TriangleMesh* triangleMesh;
 		Camera* camera;
+
+		VkDescriptorImageInfo descriptorImageInfos[8];
+		VkSampler sampler;
 	};
 
 }

@@ -32,6 +32,7 @@ namespace ppkin {
 		const VkSurfaceKHR& getSurface();
 		const VkQueue& getGraphicsQueue();
 		const VkQueue& getPresentQueue();
+		VkCommandPool* commandPool;
 	private:
 		bool isSuitableDevice(VkPhysicalDevice device);
 		bool checkDeviceExtensionSupport(VkPhysicalDevice device);

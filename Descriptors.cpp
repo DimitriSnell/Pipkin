@@ -15,12 +15,32 @@ VkDescriptorSetLayout ppkin::createDescriptorSetLayout(VkDevice device, const de
 		layoutBindings.push_back(binding);
 
 	}
+	
+	VkDescriptorSetLayoutBinding samplerLayoutBinding{};
+	samplerLayoutBinding.binding = 1;
+	samplerLayoutBinding.descriptorCount = 1;
+	samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
+	samplerLayoutBinding.pImmutableSamplers = nullptr;
+	samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+	layoutBindings.push_back(samplerLayoutBinding);
+
+	VkDescriptorSetLayoutBinding arrayLayoutBinding{};
+	arrayLayoutBinding.binding = 2;
+	arrayLayoutBinding.descriptorCount = 8;
+	arrayLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+	arrayLayoutBinding.pImmutableSamplers = nullptr;
+	arrayLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+	layoutBindings.push_back(arrayLayoutBinding);
+
 	VkDescriptorSetLayoutCreateInfo layoutInfo;
 	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	layoutInfo.bindingCount = bindings.count;
+	layoutInfo.bindingCount = static_cast<uint32_t>(layoutBindings.size());
 	layoutInfo.pBindings = layoutBindings.data();
 	layoutInfo.flags = 0;
 	layoutInfo.pNext = nullptr;
+
 
 	if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &result) != VK_SUCCESS) {
 		throw std::exception("could not create descriptor set layout!");
